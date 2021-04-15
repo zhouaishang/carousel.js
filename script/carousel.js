@@ -1,10 +1,10 @@
 /*
  * Carousel.js 0.0.1
  * Copy right Hito (vip@hitoy.org) All rights reserved
- * 
+ *  
  */
 (function(w){
-    var version = '0.0.1';
+    var version = '0.0.2';
     var readyState = w.document.readyState;
     var carousels;
     //第一次加载时执行初始化函数
@@ -94,7 +94,8 @@
         //自动播放ID
         var autoplayid;
 
-        //轮播对象的位置
+
+        //轮播对象的原始位置
         var carouselleft;
         var carouselright;
         var carouseltop;
@@ -271,13 +272,14 @@
             else
                 step = Math.min(step, slidercountinview);
 
-
             //默认状态下容器偏移量为0
             carouselscroll.setAttribute('data-translate', 0);
 
-            //需要LOOP的情况处理：向前后各插入指定数量的过渡幻灯片，以做到无缝滚动
+            /*
+             * 当需要进行LOOP时，则需要动态向前后插入幻灯片
+             */
             var positionoffset = 0;
-            if(loop){
+            if(loop & currentindex === 0){
                  //获取原始幻灯片数据
                 var origin_sliders = carouselscroll.cloneNode(true).children;
 
@@ -330,7 +332,8 @@
             //添加需要的指示器
             if(indicator){
                 var count = Math.ceil(slidercount/step);
-                indicator.innerHTML='<span class="'+activeclass+'"></span>'+'<span></span>'.repeat(count-1);
+                indicator.innerHTML='<span></span>'.repeat(count);
+                carousel_indicator(currentindex);
             }
         };
 
@@ -470,7 +473,6 @@
             return in_transition && eligible;
         }
 
-
         /*
          * 以下为对外暴露的接口
          */
@@ -486,10 +488,10 @@
             clearInterval(autoplayid);
         }
 
+
         /*
          * 以下为立即执行代码
          */
-
 
         //绑定下一页和上一页点击事件
         if(nextbutton){
@@ -517,7 +519,12 @@
                 _this.stop();
                 var target = e.target || window.event.srcElement;
                 if(disabled() || target.nodeName != 'SPAN') return false;
-                var index = (Array.from(indicator.children).indexOf(target) + 1 ) * step;
+                var index = (Array.from(indicator.children).indexOf(target));
+                if(loop){
+                    index = index * step + step;
+                }else{
+                    index = index * step;
+                }
                 slide(index);
             });
         }
@@ -588,12 +595,12 @@
             carouselscroll.addEventListener('wheel', function(ev){
                 _this.stop();
                 if(event.deltaY > 0){
-                    if(!loop && currentindex == sliderslength - 1) return false;
+                    if(!loop && currentindex == sliderslength - 1 && !disabled()) return false;
                     if(!disabled()){
                         slide(currentindex + step);
                     }
                 }else if(event.deltaY < 0){
-                    if(!loop && currentindex == 0) return false;
+                    if(!loop && currentindex == 0 && !disabled()) return false;
                     if(!disabled()){
                         slide(currentindex - step);
                     }
@@ -609,7 +616,6 @@
         }else{
             w.addEventListener("load", __init);
         }
-        w.addEventListener("resize", __init);
     }
 
     //创建Style
