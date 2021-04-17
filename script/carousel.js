@@ -1,10 +1,34 @@
 /*
- * Carousel.js 0.0.1
- * Copy right Hito (vip@hitoy.org) All rights reserved
- *  
+ * Carousel.js 0.0.3
+ * Copyright Hito (vip@hitoy.org) All rights reserved
+ *
+ *
+ * JS异步执行轮播组件库，由杨海涛编写，所有权力保留
+ * 使用方法：
+ * 异步引用组件库，编写HTML和CSS，使HTML能在不适用JS条件下正常展示
+ * 给轮播容器指定carousel-container属性
+ * 给轮播滚动父元素指定carousel-scroll属性
+ *
+ *
+ * 可选展示功能:
+ * 为轮播容器添加一个子元素，并给予carousel-indicator属性
+ * 即激活了轮播指示器功能，添加carousel-indicator-focusclass属性并赋值，即可指定焦点指示器类名
+ * 为录播容器添加2个元素，并给与carousel-next-button或carousel-previous-button
+ * 即激活了前后翻页功能
+ * 注意: 为保持灵活性，基础样式请自行指定
+ *
+ * 其他可选展示样式
+ * 为轮播容器添加不同属性，即可使用自定义功能
+ * carousel-loop 无缝循环滚动
+ * carousel-autoplay 自动滚动
+ * carousel-delay 自动滚动间隔，单位毫秒，默认6000毫秒
+ * carousel-duration 每次滚动时间，单位毫秒，默认600毫秒
+ * carousel-step 每次滚动的个数，默认为窗口可见的完整对象个数
+ * carousel-direction 滚动方向，x轴或y轴，默认x
  */
 (function(w){
-    var version = '0.0.2';
+    'use strict';
+    var version = '0.0.3';
     var readyState = w.document.readyState;
     var carousels;
     //第一次加载时执行初始化函数
@@ -18,14 +42,12 @@
     function init(){
         carousels = w.document.querySelectorAll('[carousel-container]');
         carousels.forEach(function(carousel){
-            //是否自动滚动
-            var autoplay = carousel.hasAttribute('carousel-autoplay');
             //是否循环滚动
             var loop = carousel.hasAttribute('carousel-loop');
-            //是否绑定scroll事件
-            var scroll = carousel.hasAttribute('carousel-scroll');
+            //是否自动滚动
+            var autoplay = carousel.hasAttribute('carousel-autoplay');
             //每次滑动延迟时间
-            var delay = carousel.hasAttribute('carousel-delay') ? parseInt(carousel.getAttribute('carousel-delay')) : 10000;
+            var delay = carousel.hasAttribute('carousel-delay') ? parseInt(carousel.getAttribute('carousel-delay')) : 6000;
             //每次动画持续时间
             var duration = carousel.hasAttribute('carousel-duration') ? parseInt(carousel.getAttribute('carousel-duration')): 600;
             //每次滑动的子元素个数，默认为视野内的所有子元素
@@ -55,7 +77,7 @@
             
             //指示图标
             var indicator = carousel.querySelector('[carousel-indicator]') 
-            var activeclass = indicator.getAttribute('carousel-indicator-focusclass') || 'carousels-indicator-active';
+            var activeclass = indicator ? indicator.getAttribute('carousel-indicator-focusclass') || 'carousels-indicator-active' : 'carousels-indicator-active';
             //上下按钮
             var nextbutton = carousel.querySelector('[carousel-next-button]');
             var previousbutton = carousel.querySelector('[carousel-previous-button]');
@@ -109,14 +131,14 @@
         var scrollY;
         var scrollX;
 
+        //轮播scroll的宽度和高度
+        var scrollwidth;
+        var scrollheight;
+
         //总幻灯片个数，不包含过渡幻灯片
         var slidercount;
         //能够完整显示的幻灯片的数量
         var slidercountinview;
-
-        //轮播scroll的宽度和高度
-        var scrollwidth;
-        var scrollheight;
         
         //每次滑动的个数
         var step = step;
@@ -247,49 +269,52 @@
                 }
             });
 
-            //计算视野中显示的完整幻灯片个数
-            slidercountinview = get_slider_count_in_view();
-
             //scroll容器必须被填满，否则不应有滑动功能
             if(!is_filled()){
                 eligible = false;
                 return false;
             }
 
-            /*
-             * 下面开始对数据进行解析操作
-             */
-
             //保存原始幻灯片个数
             slidercount = carouselscroll.children.length;
 
-            //激活下一页按钮
-            enable_page_button(nextbutton);
+            //计算视野中显示的完整幻灯片个数
+            slidercountinview = get_slider_count_in_view();
 
             //计算每次滑动的元素个数
             if(step === 'auto')
                 step = slidercountinview;
             else
                 step = Math.min(step, slidercountinview);
+            
+
+            /*
+             * 下面开始根据相关数据操作DOM
+             */
+
+            //激活下一页按钮
+            enable_page_button(nextbutton);
 
             //默认状态下容器偏移量为0
             carouselscroll.setAttribute('data-translate', 0);
 
             /*
              * 当需要进行LOOP时，则需要动态向前后插入幻灯片
+             * 为了保证无缝滚动，需要往前后插入视野中能够显示幻灯片的数量
+             * 系统只支持左对齐，所以需要往头部插入step个过渡幻灯片，往尾部插入slidercountinview+1个幻灯片
              */
             var positionoffset = 0;
             if(loop & currentindex === 0){
                  //获取原始幻灯片数据
                 var origin_sliders = carouselscroll.cloneNode(true).children;
 
-                //往尾部需要插入的元素
-                for(var i = 0; i <= step - slidercount%step; i++){
+                //先往往尾部需要插入的元素，减小效果抖动
+                for(var i = 0; i <= slidercountinview; i++){
                     var clone = origin_sliders[i].cloneNode(true);
                     carouselscroll.appendChild(clone);
                 }
 
-                //往头部插入的元素
+                //再往头部插入的元素，并设置位移属性
                 for(var i = slidercount - 1; i >= slidercount - step; i--){
                     var slider = origin_sliders[i];
                     var clone = slider.cloneNode(true);
