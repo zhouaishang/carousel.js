@@ -60,13 +60,6 @@
             //滚动元素的父元素
             var carouselscroll = carousel.querySelector('[carousel-scroll]');
             if(!carouselscroll) return;
-            //给滚动元素嵌套一层父元素
-            /*
-            var wrap = document.createElement('div');
-            wrap.className = 'carousel-wrap';
-            carouselscroll.parentNode.insertBefore(wrap, carouselscroll);
-            wrap.appendChild(carouselscroll);
-            */
 
             //初始化classname
             carousel.classList.add('carousel-container');
@@ -97,7 +90,7 @@
             //初始化轮播对象
             var carousel =  new Carousel(carouselscroll, duration, step, loop, direction, indicator, activeclass, nextbutton, previousbutton, mousewheel);
             if(autoplay){
-                //carousel.autoplay(delay);
+                carousel.autoplay(delay);
             }
         });
     }
