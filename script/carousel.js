@@ -1,5 +1,5 @@
 /*
- * Carousel.js 0.0.3
+ * Carousel.js 0.0.4
  * Copyright Hito (vip@hitoy.org) All rights reserved
  *
  *
@@ -28,7 +28,7 @@
  */
 (function(w){
     'use strict';
-    var version = '0.0.3';
+    var version = '0.0.4';
     var readyState = w.document.readyState;
     var carousels;
     //第一次加载时执行初始化函数
@@ -60,12 +60,13 @@
             //滚动元素的父元素
             var carouselscroll = carousel.querySelector('[carousel-scroll]');
             if(!carouselscroll) return;
-
             //给滚动元素嵌套一层父元素
+            /*
             var wrap = document.createElement('div');
             wrap.className = 'carousel-wrap';
-            carousel.insertBefore(wrap, carouselscroll);
+            carouselscroll.parentNode.insertBefore(wrap, carouselscroll);
             wrap.appendChild(carouselscroll);
+            */
 
             //初始化classname
             carousel.classList.add('carousel-container');
@@ -96,7 +97,7 @@
             //初始化轮播对象
             var carousel =  new Carousel(carouselscroll, duration, step, loop, direction, indicator, activeclass, nextbutton, previousbutton, mousewheel);
             if(autoplay){
-                carousel.autoplay(delay);
+                //carousel.autoplay(delay);
             }
         });
     }
@@ -104,6 +105,7 @@
 
     //轮播构造对象
     function Carousel(carouselscroll, duration, step, loop,  direction, indicator, activeclass, nextbutton, previousbutton, mousewheel){
+
         //替代对象
         var _this = this;
 
@@ -116,6 +118,11 @@
         //自动播放ID
         var autoplayid;
 
+        //幻灯片容器HTML
+        var html = carouselscroll.outerHTML;
+
+        //幻灯片容器包裹元素
+        var carouselwrap;
 
         //轮播对象的原始位置
         var carouselleft;
@@ -249,6 +256,14 @@
             scrollY = w.scrollY;
             scrollX = w.scrollX;
 
+            //给滚动元素嵌套一层父元素
+            if(!carouselwrap){
+                carouselwrap = document.createElement('div');
+                carouselwrap.className = 'carousel-wrap';
+                carouselscroll.parentNode.insertBefore(carouselwrap, carouselscroll);
+                carouselwrap.appendChild(carouselscroll);
+            }
+
             //获取轮播对象相关数据
             var rect = carouselscroll.getBoundingClientRect();
             carouselleft = rect.left;
@@ -360,6 +375,7 @@
                 indicator.innerHTML='<span></span>'.repeat(count);
                 carousel_indicator(currentindex);
             }
+
         };
 
         /*
