@@ -25,6 +25,9 @@
  * carousel-duration 每次滚动时间，单位毫秒，默认600毫秒
  * carousel-step 每次滚动的个数，默认为窗口可见的完整对象个数
  * carousel-direction 滚动方向，x轴或y轴，默认x
+ *
+ * 为轮播carousel-scroll增加不同属性，可定义
+ * carousel-scroll-activeclass 可见的幻灯片class
  */
 (function(w){
     'use strict';
@@ -60,6 +63,8 @@
             //滚动元素的父元素
             var carouselscroll = carousel.querySelector('[carousel-scroll]');
             if(!carouselscroll) return;
+            //可见幻灯片的属性
+            var carouselscrollactiveclass =  carouselscroll.getAttribute('carousel-scroll-activeclass') || 'visible';
 
             //初始化classname
             carousel.classList.add('carousel-container');
@@ -88,7 +93,7 @@
             }
             
             //初始化轮播对象
-            var carousel =  new Carousel(carouselscroll, duration, step, loop, direction, indicator, activeclass, nextbutton, previousbutton, mousewheel);
+            var carousel =  new Carousel(carouselscroll, carouselscrollactiveclass, duration, step, loop, direction, indicator, activeclass, nextbutton, previousbutton, mousewheel);
             if(autoplay){
                 carousel.autoplay(delay);
             }
@@ -97,7 +102,7 @@
 
 
     //轮播构造对象
-    function Carousel(carouselscroll, duration, step, loop,  direction, indicator, activeclass, nextbutton, previousbutton, mousewheel){
+    function Carousel(carouselscroll, carouselscrollactiveclass, duration, step, loop,  direction, indicator, activeclass, nextbutton, previousbutton, mousewheel){
 
         //替代对象
         var _this = this;
@@ -162,7 +167,7 @@
                 return false;
             }
             var carousel = carouselscroll.children;
-            if(index > carousel.length) return false;
+            if(index > carousel.length || index < 0) return false;
 
             var slider = carousel[index];
             var rect = slider.getBoundingClientRect();
@@ -177,19 +182,18 @@
          * @return int
          */
         function get_slider_count_in_view(){
-            var sliders = carouselscroll.children;
-            var slidercount = sliders.length;
             var containernum =  ( direction === 'x' ) ? carouselwidth : carouselheight;
+            var count = carouselscroll.children.length;
 
-            for(var i = 0; i < slidercount; i++){
-                var num = get_offset(i);
-                if(num == containernum){
-                    return i;
-                }
-                else if(num > containernum){
-                    return i - 1;
+            for(var i in carouselscroll.children){
+                var slider = carouselscroll.children[i];
+                var rect = slider.getBoundingClientRect();
+                var num = ( direction == 'x' ) ? rect.right - carouselleft - (scrollX - w.scrollX) :  rect.bottom - carouseltop - (scrollY - w.scrollY);
+                if(num > containernum){
+                    return parseInt(i);
                 }
             }
+            return count;
         }
 
         /*
@@ -295,7 +299,6 @@
             else
                 step = Math.min(step, slidercountinview);
             
-
             /*
              * 下面开始根据相关数据操作DOM
              */
@@ -342,11 +345,16 @@
             }
 
             //给所有幻灯片设置宽度和高
-            carouselscroll.childNodes.forEach(function(node,i){
+            //并给视野中完整的幻灯片设置class
+            var min = loop ?  step : 0;
+            var max = loop ? slidercountinview+step : slidercountinview;
+            carouselscroll.childNodes.forEach(function(node, i){
                 if(node.nodeType === 1){
                     node.style.width = node.offsetWidth + 'px';
                     node.style.height = node.offsetHeight + 'px';
                 }
+                if( i >= min && i < max)
+                    node.classList.add(carouselscrollactiveclass);
             });
             
             //通过最后一个元素计算scroll的高度和宽度并
@@ -439,6 +447,13 @@
                     enable_page_button(nextbutton);
                     enable_page_button(previousbutton);
                 }
+                //给正在展示的幻灯片增加一个class便于控制样式
+                carouselscroll.childNodes.forEach(function(c, i){
+                    if(i >= index && i < index + slidercountinview)
+                        c.classList.add(carouselscrollactiveclass);
+                    else
+                        c.classList.remove(carouselscrollactiveclass);
+                });
                 in_transition = false; 
             }, duration);
         }
