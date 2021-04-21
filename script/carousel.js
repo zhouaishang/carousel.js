@@ -348,13 +348,17 @@
             //并给视野中完整的幻灯片设置class
             var min = loop ?  step : 0;
             var max = loop ? slidercountinview+step : slidercountinview;
+            var order = 1;
             carouselscroll.childNodes.forEach(function(node, i){
                 if(node.nodeType === 1){
                     node.style.width = node.offsetWidth + 'px';
                     node.style.height = node.offsetHeight + 'px';
                 }
-                if( i >= min && i < max)
+                if( i >= min && i < max){
                     node.classList.add(carouselscrollactiveclass);
+                    node.setAttribute('data-order', order);
+                    order++;
+                }
             });
             
             //通过最后一个元素计算scroll的高度和宽度并
@@ -448,11 +452,16 @@
                     enable_page_button(previousbutton);
                 }
                 //给正在展示的幻灯片增加一个class便于控制样式
+                var order = 1;
                 carouselscroll.childNodes.forEach(function(c, i){
-                    if(i >= index && i < index + slidercountinview)
+                    if(i >= index && i < index + slidercountinview){
                         c.classList.add(carouselscrollactiveclass);
-                    else
+                        c.setAttribute('data-order', order);
+                        order++;
+                    }else{
                         c.classList.remove(carouselscrollactiveclass);
+                        c.removeAttribute('data-order');
+                    }
                 });
                 in_transition = false; 
             }, duration);
