@@ -39,8 +39,8 @@
       * carousel-indicator-focusclass 焦点指示器类名，默认carousel-indicator-active
 
 ## 注意
-* carousel.js支持不同宽度的幻灯片切换，carousel-scroll下的幻灯片应为inline-block, carousel-scroll应该添加overflow:hidden属性
+* carousel.js支持不同宽度的幻灯片切换，**carousel-scroll下的幻灯片应为inline-block**, **carousel-scroll应该添加overflow:hidden属性**
 * carousel.js会根据系统配置自动往carousel-indicator添加子元素，元素类型为span，请根据展示需要自行配置样式
 * 系统对正在显示的幻灯片动态添加了类名，可使用CSS动画属性进行动画个性化定制
 * carousel-mousewheel绑定了鼠标滚轮事件切换幻灯片，如果此时使用carousel-loop，可能会造成鼠标滚轮被锁定，无法滚动网页，避免同时使用它们
-* 关于使用问题，或者上报bug请联系vip#hitoy.org(#=>@)
+* 关于使用问题，或上报bug请联系vip#hitoy.org(#=>@)
