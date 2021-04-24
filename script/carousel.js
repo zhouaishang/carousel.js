@@ -76,7 +76,7 @@
             
             //指示图标
             var indicator = carousel.querySelector('[carousel-indicator]') 
-            var activeclass = indicator ? indicator.getAttribute('carousel-indicator-focusclass') || 'carousels-indicator-active' : 'carousels-indicator-active';
+            var activeclass = indicator ? indicator.getAttribute('carousel-indicator-focusclass') || 'carousel-indicator-active' : 'carousel-indicator-active';
             //上下按钮
             var nextbutton = carousel.querySelector('[carousel-next-button]');
             var previousbutton = carousel.querySelector('[carousel-previous-button]');
