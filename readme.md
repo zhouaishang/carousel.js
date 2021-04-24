@@ -21,20 +21,20 @@
 >   <span carousel-previous-button></span>
 > </div>
 * carousel.js还支持更多自定义选项，可分别在不同的域内指定：
-** carousel-container: 
-*** carousel-loop 无缝循环滚动
-*** carousel-autoplay 自动滚动
-*** carousel-mousewheel 是否绑定鼠标滚轮切换幻灯片显示
-*** carousel-delay 需要指定值，自动滚动间隔，单位毫秒，默认6000毫秒
-*** carousel-duration 需要指定值，每次滚动时间，单位毫秒，默认600毫秒
-*** carousel-step 需要指定值，每次滚动的个数，默认为窗口可见的完整对象个数
-*** carousel-direction 需要指定值，滚动方向，x轴或y轴，默认x
+   * carousel-container: 
+      * carousel-loop 无缝循环滚动
+      * carousel-autoplay 自动滚动
+      * carousel-mousewheel 是否绑定鼠标滚轮切换幻灯片显示
+      * carousel-delay 需要指定值，自动滚动间隔，单位毫秒，默认6000毫秒
+      * carousel-duration 需要指定值，每次滚动时间，单位毫秒，默认600毫秒
+      * carousel-step 需要指定值，每次滚动的个数，默认为窗口可见的完整对象个数
+      * carousel-direction 需要指定值，滚动方向，x轴或y轴，默认x
 
-** carousel-scroll:
-*** carousel-scroll-activeclass 可见的幻灯片类名，默认visible
+   * carousel-scroll:
+      * carousel-scroll-activeclass 可见的幻灯片类名，默认visible
 
-** carousel-indicator:
-*** carousel-indicator-focusclass 焦点指示器类名，默认carousel-indicator-active
+   * carousel-indicator:
+      * carousel-indicator-focusclass 焦点指示器类名，默认carousel-indicator-active
 
 ## 注意
 * carousel.js支持不同宽度的幻灯片切换，carousel-scroll下的幻灯片应为inline-block, carousel-scroll应该添加overflow:hidden属性
