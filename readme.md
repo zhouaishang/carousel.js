@@ -4,22 +4,24 @@
 ## 使用方法
 * 在网页头部引入carousel.js，推荐添加async异步执行
 * 编辑基础的HTML和CSS代码，使carousel在不运行的情况下，可正常查看，基础的符合carousel.js规范轮播结构包含以下四个组件：
-** carousel-container: 轮播容器，包含所有的轮播组件
-** carousel-scroll: 轮播滚动器，包含所有的用于轮播的幻灯片
-** carousel-indicator: (可选)轮播指示器，用于显示当前播放的幻灯片索引
-** carousel-next-button和carousel-previous-button: (可选)翻页按钮，用于切换播放的幻灯片
+   * carousel-container: 轮播容器，包含所有的轮播组件
+   * carousel-scroll: 轮播滚动器，包含所有的用于轮播的幻灯片
+   * carousel-indicator: (可选)轮播指示器，用于显示当前播放的幻灯片索引
+   * carousel-next-button和carousel-previous-button: (可选)翻页按钮，用于切换播放的幻灯片
 * 编辑好HTML和CSS之后，对相应的标签添加属性以指定轮播库组件，一个demo如下:
-> <div class="container" carousel-container>
->   <ul class="altas" carousel-scroll>
->       <li><img src="example.jpg" alt="example"></li>
->       <li><img src="example.jpg" alt="example"></li>
->       <li><img src="example.jpg" alt="example"></li>
->       <li><img src="example.jpg" alt="example"></li>
->   </ul>
->   <div class="indicator" carousel-indicator></div>
->   <span carousel-next-button></span>
->   <span carousel-previous-button></span>
-> </div>
+'''
+<div class="container" carousel-container>
+    <ul class="altas" carousel-scroll>
+        <li><img src="example.jpg" alt="example"></li>
+        <li><img src="example.jpg" alt="example"></li>
+        <li><img src="example.jpg" alt="example"></li>
+        <li><img src="example.jpg" alt="example"></li>
+    </ul>
+    <div class="indicator" carousel-indicator></div>
+    <span carousel-next-button></span>
+    <span carousel-previous-button></span>
+</div>
+'''
 * carousel.js还支持更多自定义选项，可分别在不同的域内指定：
    * carousel-container: 
       * carousel-loop 无缝循环滚动
