@@ -9,7 +9,7 @@
    * carousel-indicator: (可选)轮播指示器，用于显示当前播放的幻灯片索引
    * carousel-next-button和carousel-previous-button: (可选)翻页按钮，用于切换播放的幻灯片
 * 编辑好HTML和CSS之后，对相应的标签添加属性以指定轮播库组件，一个demo如下:
-'''
+```
 <div class="container" carousel-container>
     <ul class="altas" carousel-scroll>
         <li><img src="example.jpg" alt="example"></li>
@@ -21,7 +21,7 @@
     <span carousel-next-button></span>
     <span carousel-previous-button></span>
 </div>
-'''
+```
 * carousel.js还支持更多自定义选项，可分别在不同的域内指定：
    * carousel-container: 
       * carousel-loop 无缝循环滚动
