@@ -426,8 +426,8 @@
             else{
                 if(index < 0)
                     index = 0;
-                else if(index >= slidercount - step)
-                    index = slidercount - step;
+                else if(index >= slidercount - slidercountinview)
+                    index = slidercount - slidercountinview;
             }
 
             //显示指示器
@@ -439,7 +439,7 @@
 
             //同时: 在动画结束之后还原状态
             setTimeout(function(){
-                if(!loop && currentindex >= slidercount - step){
+                if(!loop && currentindex >= slidercount - slidercountinview){
                     disable_page_button(nextbutton);
                 }
                 //如果不loop，到头部，则不能网上翻页
